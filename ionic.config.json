@@ -1,0 +1,7 @@
+{
+  "name": "loginInicial",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}

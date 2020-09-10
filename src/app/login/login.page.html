@@ -1,0 +1,37 @@
+<!-- <ion-header>
+  <ion-toolbar>
+    <ion-title>Login</ion-title>
+  </ion-toolbar>
+</ion-header> -->
+
+<!-- <ion-list>
+  <ion-item *ngFor="let item of items">
+    <ion-thumbnail slot="start">
+      <ion-img [src]="./login.svg"></ion-img>
+    </ion-thumbnail>
+  </ion-item>
+</ion-list> -->
+  
+<ion-content class="ion-padding" >
+  
+  <div class="loginContent">
+    <img src="../../assets/login.svg" alt="imagen login" class="imagenLogin"/>
+      <ion-item>
+        <ion-label position="floating">Correo electrónico</ion-label>
+        <ion-input type='email' [(ngModel)]="email"></ion-input>
+      </ion-item>
+      
+      <ion-item>
+        <ion-label position="floating">Contraseña</ion-label>
+        <ion-input type='password' [(ngModel)]="password" [type]="showPassword ? 'text': 'password' "></ion-input>
+        <ion-icon class="icon" slot="end" [name]="passwordToggleEye" (click)='cambiarOjo()'></ion-icon>
+      </ion-item>
+
+      <p>
+        ¿No tienes una cuenta? <a routerLink="/register" (click)='clear()'>Regístrate</a>
+      </p>
+      
+      <ion-button fill='solid' expand="block" color='dark' (click)='login()'>Login</ion-button>
+    </div>
+    
+  </ion-content> 
