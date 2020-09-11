@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { auth } from 'firebase/app';
 import { AlertController } from '@ionic/angular';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +16,7 @@ export class LoginPage implements OnInit {
   showPassword = false;
   passwordToggleEye = "eye";
 
-  constructor(public afAuth: AngularFireAuth, private alertCtrl: AlertController) { }
+  constructor(public afAuth: AngularFireAuth, private alertCtrl: AlertController, private router: Router) { }
 
   ngOnInit() {
   }
@@ -26,10 +27,11 @@ export class LoginPage implements OnInit {
       const result = await this.afAuth.signInWithEmailAndPassword(email, password)
       if(result){
         this.handleBienvenida()
+        this.router.navigate(['/bienvenido'])
       }
     }catch(error){
       console.dir(error)
-      this.handleError()
+      this.handleError(error.message)
     }
   }
 
@@ -58,14 +60,31 @@ export class LoginPage implements OnInit {
     await alert.present();
   }
 
-  async handleError() {
-    const alert = await this.alertCtrl.create({
-      header: 'ERROR!',
-      message: 'Ingrese correo y contraseñas correctas',
-      buttons: ['Continuar']
-    });
-    
-    await alert.present();
+  async handleError(cadena:string) {
+    if(cadena === 'The email address is badly formatted.'){
+      const alert = await this.alertCtrl.create({
+        header: 'ERROR!',
+        message: 'El correo electrónico no tiene el formato correcto',
+        buttons: ['Continuar']
+      });
+      await alert.present();
+    }
+    else if(cadena === "The password is invalid or the user does not have a password."){
+      const alert = await this.alertCtrl.create({
+        header: 'ERROR!',
+        message: 'La clave es erronea o no incluyó una',
+        buttons: ['Continuar']
+      });
+      await alert.present();
+    }
+    else{
+      const alert = await this.alertCtrl.create({
+        header: 'ERROR!',
+        message: 'No se encontró el usuario ingresado.',
+        buttons: ['Continuar']
+      });
+      await alert.present();
+    }
   }
 
 

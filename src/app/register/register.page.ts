@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { auth } from 'firebase/app';
 import { AlertController } from '@ionic/angular';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -18,7 +19,7 @@ export class RegisterPage implements OnInit {
   passwordToggleEye = "eye";
   passwordToggleEyeCpassWord = "eye";
 
-  constructor(public afAuth: AngularFireAuth, private alertCtrl: AlertController) { }
+  constructor(public afAuth: AngularFireAuth, private alertCtrl: AlertController, private route: Router) { }
 
   ngOnInit() {
   }
@@ -30,9 +31,12 @@ export class RegisterPage implements OnInit {
         const result = await this.afAuth.createUserWithEmailAndPassword(email,password)
         if(result){
           this.handleBienvenida()
+          this.route.navigate(['/login'])
         }
       }catch(error){
         console.dir(error)
+        this.handleError(error.message)
+      
       }
     }
     else{
@@ -74,6 +78,26 @@ export class RegisterPage implements OnInit {
     });
 
     await alert.present();
+  }
+
+  async handleError(cadena:string) {
+    if(cadena === 'The email address is badly formatted.'){
+      const alert = await this.alertCtrl.create({
+        header: 'ERROR!',
+        message: 'El correo electrónico no tiene el formato correcto',
+        buttons: ['Continuar']
+      });
+      await alert.present();
+    }
+    else{
+      const alert = await this.alertCtrl.create({
+        header: 'ERROR!',
+        message: 'No se encontró el usuario ingresado.',
+        buttons: ['Continuar']
+      });
+      
+      await alert.present();
+    }
   }
 
   async handleErrorContrasenasDif() {
